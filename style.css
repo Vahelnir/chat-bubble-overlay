@@ -1,0 +1,60 @@
+body {
+  font-family: sans-serif; /* police mid mais qui fera l'affaire */
+  overflow: hidden;
+}
+
+.chat {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bubble {
+  padding: 10px 16px;
+  font-size: 18px;
+
+  display: inline-block; /* pour eviter que ça fasse tjr la meme taille */
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  overflow: hidden;
+  max-width: 100%;
+
+  animation: pop 0.3s;
+}
+
+.bubble-out {
+  animation: pop-out 0.2s forwards;
+}
+
+.emote {
+  height: 24px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+@keyframes pop {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes pop-out {
+  from {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+}
