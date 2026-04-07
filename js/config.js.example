@@ -3,10 +3,11 @@ const CONFIG = {
   channel: "bipeo",
 
   // options de style
+  // les couleurs acceptent le mots clés, couleur hexadécimale rgb au format rgb(255,255,255) et rgba (transparence) format rgba(255,255,255,1)
   style: {
-    // couleur du texte des bulles de chat, accepte un mot clé, une couleur hexadecimale ou rgb au format rgb(255,255,255) ou transparente au format rgba(255,255,255,1)
+    // couleur du texte des bulles de chat
     textColor: "#2061B6",
-    // couleur du texte des bulles de chat, accepte un mot clé, une couleur hexadecimale ou rgb au format rgb(255,255,255) ou transparente au format rgba(255,255,255,1)
+    // couleur du fond des bulles de chat
     backgroundColor: "#cde3ff",
     // rondeur de bordure, plus la valeur est elevée, plus la rondeur est intense
     borderRadius: "50px",
@@ -22,6 +23,7 @@ const CONFIG = {
     alignment: "left",
 
     // delais en ms avant qu'un message disparait
+    // si vous mettez -1, le message ne disparaitra jamais
     disappearDelay: 8000,
   },
 };

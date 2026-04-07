@@ -91,13 +91,15 @@ client.on("message", (channel, tags, message, self) => {
     b.style.transform = "translateY(0)";
   });
 
-  setTimeout(() => {
-    bubble.classList.add("bubble-out");
-
-    // delais dans delais pour appliquer la transition de depart avant de delete l'element
+  if (CONFIG.chat.disappearDelay != -1) {
     setTimeout(() => {
-      bubble.remove();
-    }, 300);
+      bubble.classList.add("bubble-out");
 
-  }, CONFIG.chat.disappearDelay);
+      // autre delais pour appliquer la transition de depart avant de delete l'element
+      setTimeout(() => {
+        bubble.remove();
+      }, 300);
+
+    }, CONFIG.chat.disappearDelay);
+  }
 });
