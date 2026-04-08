@@ -16,11 +16,13 @@ const CONFIG = {
   },
 
   chat: {
-    // longueur maximale du cadre du chat
-    maxWidth: "400px",
+    // hauteur de votre chat dans OBS
+    height: "400px",
+    // longueur de votre chat dans OBS
+    width: "400px",
 
-    // alignement du chat, accepte seulement trois valeurs : "left" | "center" | "right"
-    alignment: "left",
+    // position d'apparition du chat, accepte seulement deux valeurs : "haut" | "bas"
+    apparition: "bas",
 
     // delais en ms avant qu'un message disparait
     // si vous mettez -1, le message ne disparaitra jamais
