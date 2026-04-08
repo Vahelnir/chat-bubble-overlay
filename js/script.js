@@ -1,22 +1,15 @@
 const chatContainer = document.querySelector(".chat"); // miaou
 
 // injection de config pour la longueur max de la chatbox
-chatContainer.style.maxWidth = CONFIG.chat.maxWidth;
+chatContainer.style.maxWidth = CONFIG.chat.width;
+chatContainer.style.minHeight = CONFIG.chat.height;
 
-const alignment = CONFIG.chat.alignment;
+const apparition = CONFIG.chat.apparition;
 
-// pas le plus propre mais fera bien le taff
-if (alignment === "center") {
-  chatContainer.style.left = "50%";
-  chatContainer.style.transform = "translateX(-50%)";
-  chatContainer.style.alignItems = "center";
-} else if (alignment === "right") {
-  chatContainer.style.left = "auto";
-  chatContainer.style.right = "20px";
-  chatContainer.style.alignItems = "flex-end";
-} else {
-  chatContainer.style.alignItems = "flex-start";
+if (apparition == "bas") {
+  chatContainer.style.justifyContent = "flex-end";
 }
+
 
 const client = new tmi.Client({
   channels: [CONFIG.channel], // chaine du streamer voulu
@@ -101,5 +94,7 @@ client.on("message", (channel, tags, message, self) => {
       }, 300);
 
     }, CONFIG.chat.disappearDelay);
+  } else {
+    window.scrollBy({top: bubble.offsetHeight + 10, left: 0, behavior: "smooth"})
   }
 });
