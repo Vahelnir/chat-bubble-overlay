@@ -10,7 +10,6 @@ if (apparition == "bas") {
   chatContainer.style.justifyContent = "flex-end";
 }
 
-
 const client = new tmi.Client({
   channels: [CONFIG.channel], // chaine du streamer voulu
 });
@@ -54,7 +53,7 @@ const parseMessage = (message, emotes) => {
 
 client.connect();
 
-client.on("message", (channel, tags, message, self) => {
+client.on("message", async (_channel, tags, message, self) => {
   if (self) return;
   if (!tags.badges || !tags.badges.broadcaster) return; // verif uniquement streamer
 
@@ -74,27 +73,60 @@ client.on("message", (channel, tags, message, self) => {
   chatContainer.appendChild(bubble);
 
   // pour faire l'animation etou
-  existingBubbles.forEach((b, i) => {
-    const lastRect = b.getBoundingClientRect();
+  existingBubbles.forEach((bubble, i) => {
+    const lastRect = bubble.getBoundingClientRect();
     const dy = firstRects[i].top - lastRect.top;
-    b.style.transition = "none";
-    b.style.transform = `translateY(${dy}px)`;
-    b.getBoundingClientRect();
-    b.style.transition = "transform 0.3s ease";
-    b.style.transform = "translateY(0)";
+    bubble.animate(
+      {
+        transform: [`translateY(${dy}px)`, "translateY(0)"],
+      },
+      {
+        duration: 300,
+        easing: "ease",
+      },
+    );
   });
 
   if (CONFIG.chat.disappearDelay != -1) {
-    setTimeout(() => {
-      bubble.classList.add("bubble-out");
-
-      // autre delais pour appliquer la transition de depart avant de delete l'element
-      setTimeout(() => {
-        bubble.remove();
-      }, 300);
-
-    }, CONFIG.chat.disappearDelay);
+    await wait(CONFIG.chat.disappearDelay);
+    await removeBubble(bubble).catch((err) =>
+      console.error("Erreur lors de la suppression d'une bulle :", err),
+    );
   } else {
-    window.scrollBy({top: bubble.offsetHeight + 10, left: 0, behavior: "smooth"})
+    window.scrollBy({
+      top: bubble.offsetHeight + 10,
+      left: 0,
+      behavior: "smooth",
+    });
   }
 });
+
+/**
+ * Supprime une bulle proprement
+ *
+ * @param {HTMLElement} bubble la bulle à faire disparaitre
+ */
+async function removeBubble(bubble) {
+  bubble.classList.add("bubble-out");
+  // trouve l'animation qui se lance à l'ajout de la classe bubble-out
+  const bubbleOutAnimation = bubble
+    .getAnimations()
+    .find(
+      (animation) =>
+        animation instanceof CSSAnimation &&
+        animation.animationName === "pop-out",
+    );
+  // et attendre qu'elle se termine si elle existe
+  await bubbleOutAnimation?.finished;
+  bubble.remove();
+}
+
+/**
+ * Permet d'attendre {@link ms} (en millisecondes)
+ *
+ * @param {number} ms temps à attendre en millisecondes
+ * @returns {Promise<void>} une promesse qui se résout après {@link ms} millisecondes
+ */
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
